@@ -1,11 +1,10 @@
-require('dotenv/config');
-const express = require('express');
+import express from 'express';
 const app = express();
 const port = process.env.PORT || 4040;
 
 // Import the MongoDB connection
-const dbClient = require('./db');
-const { PostArticle } = require('./controllers/Articles');
+import {client as dbClient } from "./db.js"
+import { PostArticle } from "./controllers/Articles.js"
 
 app.get('/', async (req, res) => {
   // Access a MongoDB collection and perform operations
