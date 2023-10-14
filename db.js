@@ -3,7 +3,9 @@ import { MongoClient } from 'mongodb';
 
 const uri = process.env.DB_URL;
 console.log("uri", uri)
-export const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+export const client = new MongoClient(uri,
+{ useNewUrlParser: true, useUnifiedTopology: true }
+);
 
 
 export async function connectDB() {
@@ -15,5 +17,4 @@ export async function connectDB() {
   }
 }
 
-connectDB();
 
