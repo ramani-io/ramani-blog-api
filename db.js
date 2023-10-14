@@ -1,10 +1,14 @@
-const { MongoClient } = require('mongodb');
+import { MongoClient } from 'mongodb';
+
 
 const uri = process.env.DB_URL;
 console.log("uri", uri)
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+export const client = new MongoClient(uri,
+{ useNewUrlParser: true, useUnifiedTopology: true }
+);
 
-async function connectDB() {
+
+export async function connectDB() {
   try {
     await client.connect();
     console.log('Connected to MongoDB');
@@ -13,6 +17,4 @@ async function connectDB() {
   }
 }
 
-connectDB();
 
-module.exports = client;
