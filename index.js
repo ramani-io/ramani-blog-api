@@ -1,5 +1,5 @@
 import express from 'express';
-import router from './routes/index.js';
+import router from './routes/blogPostRoute.js';
 import { errorHandler } from './middlwares/errorHandler.js';
 const app = express();
 const port = process.env.PORT || 4040;
@@ -24,7 +24,6 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/article', PostArticle);
-
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);

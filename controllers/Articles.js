@@ -1,13 +1,13 @@
 import { Blogpost } from "../models/Blogpost.js";
 import asyncHandler from "express-async-handler";
-
+import ResponseHandler from "../middlwares/responseHandler.js"
 export const PostArticle = async (req, res) => {
   // Post an article to the DB
 };
 
 export const getAllBlogPosts = async (req, res) => {
   const Post = await Blogpost.find({});
-  res.status(200).json(Post);
+  ResponseHandler.success(res,Post,"Get all blogpost successfully",200)
 };
 
 export const getBlogPostById = asyncHandler(async (req, res) => {
@@ -16,13 +16,13 @@ export const getBlogPostById = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Blogpost not found");
   }
-  res.status(200).json(blogpost);
+  ResponseHandler.success(res,blogpost,"Get blogpost by id successfully",200)
 });
 
 export const createBlogPost = asyncHandler(async (req, res) => {
   const { title, createdBy, description } = req.body;
   if (!title || !createdBy || !description) {
-    res.status(400);
+    ResponseHandler.error(res,"",400)
     throw new Error("Please all the fields required");
   } else {
     try {
@@ -33,7 +33,7 @@ export const createBlogPost = asyncHandler(async (req, res) => {
         createdAt: new Date().toISOString(),
       });
       await Post.save();
-      res.status(201).json({ message: "Post created" });
+      ResponseHandler.success(res, Post, 'BlogPost created successfully',200)
     } catch (err) {
       console.log(err, "This is an error");
     }
@@ -43,7 +43,7 @@ export const createBlogPost = asyncHandler(async (req, res) => {
 export const updateBlogPost = asyncHandler(async (req, res) => {
   const blogpost = await Blogpost.findById(req.params.id);
   if (!blogpost) {
-    res.status(404);
+    ResponseHandler.error(res,"BlogPost not Found",404)
     throw new Error("Blogpost not found");
   } else {
     const updateBlogPost = await Blogpost.findByIdAndUpdate(
@@ -51,7 +51,8 @@ export const updateBlogPost = asyncHandler(async (req, res) => {
       req.body,
       { new: true }
     );
-    res.status(200).json(updateBlogPost);
+    ResponseHandler.success(res, updateBlogPost, 'BlogPost updated successfully',200);
+
   }
 });
 
@@ -59,12 +60,12 @@ export const updateBlogPost = asyncHandler(async (req, res) => {
 export const deleteBlogPost = asyncHandler(async (req, res) => {
   const blogpost = await Blogpost.findById(req.params.id);
   if (!blogpost) {
-    res.status(404)
+    ResponseHandler.error(res,blogpost,"BlogPost not found",404)
     throw new Error("Blogpost not found")
   } 
   try { 
     await blogpost.deleteOne({ _id: req.params.id });
-    res.status(200).json(blogpost)
+    ResponseHandler.success(res,blogpost,"BlogPost deleted successfully",200)
 
   } catch (err) {
     console.log(err,"This is an error")
