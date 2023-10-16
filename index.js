@@ -1,12 +1,25 @@
-require('dotenv/config');
-const express = require('express');
+
+import express from 'express';
+import BlogRouter from './routes/blogPostRoute.js';
+import UserRouter from './routes/userRoute.js';
+
+import { errorHandler } from './middlwares/errorHandler.js';
 
 const app = express();
 const port = process.env.PORT || 4040;
+import { connect } from 'mongoose';
 
 // Import the MongoDB connection
-const dbClient = require('./db');
-const { PostArticle } = require('./controllers/Articles');
+import {client as dbClient,connectDB } from "./db.js"
+import { PostArticle } from "./controllers/Articles.js"
+app.use(express.json())
+app.use("/api/blogs", BlogRouter)
+app.use("/api/auth", UserRouter)
+
+app.use(errorHandler)
+
+connectDB();
+
 
 app.get('/', async (req, res) => {
   // Access a MongoDB collection and perform operations
@@ -17,7 +30,6 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/article', PostArticle);
-
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
