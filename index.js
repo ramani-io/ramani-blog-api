@@ -1,8 +1,10 @@
+
 import express from 'express';
 import BlogRouter from './routes/blogPostRoute.js';
 import UserRouter from './routes/userRoute.js';
 
 import { errorHandler } from './middlwares/errorHandler.js';
+
 const app = express();
 const port = process.env.PORT || 4040;
 import { connect } from 'mongoose';
