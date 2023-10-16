@@ -10,9 +10,20 @@ const blogpostSchema = new mongoose.Schema({
               type: String,
               required: true
        },
+       // Author this is an author, author = createdBy  
        createdBy: {
-              type: String,
-              required: true,
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'User',
+       },
+       comments: [
+              {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Comment',
+              },
+       ],
+       category: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Category',
        },
        createdAt: {
               type: Date,
