@@ -42,7 +42,7 @@ export const loginUser = asyncHandler(async (req, res) => {
                                    id: user.id,
                                    role:user.role
                             }
-                     }, "SECRET",{expiresIn:"1m"})
+                     }, "SECRET",{expiresIn:"1hr"})
                      return  ResponseHandler.success(res,{email:user.email,_id:user.id,accessToken,role: user.role},"User login successfully",200)
                      
               } else {

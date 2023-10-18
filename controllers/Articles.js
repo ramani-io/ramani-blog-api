@@ -2,7 +2,6 @@ import { Blogpost } from "../models/Blogpost.js";
 import asyncHandler from "express-async-handler";
 import ResponseHandler from "../middlwares/responseHandler.js"
 import { Category } from "../models/Category.js";
-import { Comment } from "../models/Comment.js";
 export const PostArticle = async (req, res) => {
   // Post an article to the DB
 };
@@ -13,7 +12,7 @@ export const getAllBlogPosts = asyncHandler(async (req, res) => {
 })
 
 export const getBlogPostById = asyncHandler(async (req, res) => {
-  const blogpost = await Blogpost.findById(req.params.id).populate('comments')
+  const blogpost = await Blogpost.findById(req.params.id).populate('comments').populate('category')
   if (!blogpost) {
     res.status(404);
     throw new Error("Blogpost not found");
@@ -57,6 +56,8 @@ export const updateBlogPost = asyncHandler(async (req, res) => {
   if (!blogpost) {
     ResponseHandler.error(res,"BlogPost not Found",404)
     throw new Error("Blogpost not found");
+  }if (blogpost.createdBy.toString() !== req.user.id) {
+    return ResponseHandler.error(res, "You are not authorized to update this blogpost", 403);
   } else {
     const updateBlogPost = await Blogpost.findByIdAndUpdate(
       req.params.id,
@@ -74,7 +75,9 @@ export const deleteBlogPost = asyncHandler(async (req, res) => {
   if (!blogpost) {
     ResponseHandler.error(res,blogpost,"BlogPost not found",404)
     throw new Error("Blogpost not found")
-  } 
+  } if (blogpost.createdBy.toString() !== req.user.id) {
+    return ResponseHandler.error(res, "You are not authorized to delete this blogpost", 403);
+  }
   try { 
     await blogpost.deleteOne({ _id: req.params.id });
     ResponseHandler.success(res,blogpost,"BlogPost deleted successfully",200)
@@ -83,31 +86,6 @@ export const deleteBlogPost = asyncHandler(async (req, res) => {
     console.log(err,"This is an error")
   }
 });
-
-export const addCommentToPost = asyncHandler(async (req, res) => {
-  const { text } = req.body;
-  try {
-    const blogPost = await Blogpost.findById(req.params.id);
-
-    if (!blogPost) {
-      return ResponseHandler.error(res, 'Blog post not found', 404);
-    }
-    const comment = new Comment({
-      text,
-      createdBy: req.user.id, 
-      blogPost: req.params.id,
-      createdAt: new Date().toISOString(),
-    });
-
-    const savedComment = await comment.save();    
-    blogPost.comments.push(savedComment._id);
-    await blogPost.save();
-    ResponseHandler.success(res, savedComment, 'Comment added successfully', 201);
-  } catch (error) {
-    console.log("The error here it is",error)
-    ResponseHandler.error(res, 'Failed to add a comment', 500);
-  }
-})
 
 export const createCategory = asyncHandler(async (req, res) => {
     const { name } = req.body
