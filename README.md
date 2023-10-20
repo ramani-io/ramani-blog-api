@@ -18,10 +18,19 @@ API for <https://github.com/ramani-io/ramani-blog>
     npm install
     npm run dev
 
-## Resources
+## Learning Resources
+
+### Node.Js
 
 - [Official Node.js Documentation](https://nodejs.org/api/)
+- [Node.Js Full Course](https://www.youtube.com/watch?v=f2EqECiTBL8)
+- [Node.js Tutorial for Beginners](https://www.youtube.com/watch?v=TlB_eWDSMt4)
+
+### MongoDB
+
 - [Official MongoDB Documentation](https://www.mongodb.com/docs/drivers/node/current/)
+- [Intro to MongoDB and Mongoose](https://www.youtube.com/watch?v=-PdjUx9JZ2E)
+- [MongoDB Crash Course](https://www.youtube.com/watch?v=ofme2o29ngU)
 
 ## Contribution Guidelines
 
